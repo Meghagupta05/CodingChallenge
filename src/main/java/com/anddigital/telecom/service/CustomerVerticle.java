@@ -20,6 +20,9 @@ public class CustomerVerticle extends AbstractVerticle {
 
 	private List<JsonObject> customers = new ArrayList<>();
 
+	/**
+	 *  This start the server and route the URL to handler. 
+	 */
 	@Override
 	public void start() {
 
@@ -34,7 +37,10 @@ public class CustomerVerticle extends AbstractVerticle {
 
 		vertx.createHttpServer().requestHandler(router::accept).listen(8080);
 	}
-
+	/**
+	 * handle url /contacts/:custname to get all phone number of a customer
+	 * @param routingContext
+	 */
 	private void hanldeGetContacts(RoutingContext routingContext) {
 		String custname = routingContext.request().getParam("custname");
 
@@ -56,6 +62,10 @@ public class CustomerVerticle extends AbstractVerticle {
 
 	}
 
+	/**
+	 * handle URL /allcontacts to give all the contacts. 
+	 * @param routingContext
+	 */
 	private void handleGetAllCustContacts(RoutingContext routingContext) {
 		JsonArray arr = new JsonArray();
 
@@ -66,7 +76,13 @@ public class CustomerVerticle extends AbstractVerticle {
 		});
 		routingContext.response().putHeader("content-type", "application/json").end((arr.encodePrettily()));
 	}
-
+	/**
+	 * handle URL activate/contact/:contactno to activate a number
+	 * @param routingContext
+	 * 
+	 * we have a list of activate number and deactivate number for each customer.
+	 * when no is activated then we move that no from deactive list to contacts list.
+	 */
 	private void handleActivateMobile(RoutingContext routingContext) {
 		String contactno = routingContext.request().getParam("contactno");
 		HttpServerResponse response = routingContext.response();
@@ -94,7 +110,10 @@ public class CustomerVerticle extends AbstractVerticle {
 
 		}
 	}
-
+	/**
+	 * Gives all customer information
+	 * @param routingContext
+	 */
 	private void handleGetAllCustomers(RoutingContext routingContext) {
 		JsonArray arr = new JsonArray();
 		routingContext.response().putHeader("content-type", "application/json").end(customers.toString());
@@ -103,7 +122,10 @@ public class CustomerVerticle extends AbstractVerticle {
 	private void sendError(int statusCode, HttpServerResponse response) {
 		response.setStatusCode(statusCode).end();
 	}
-
+	/**
+	 * This method adding few sample data in list 
+	 * 
+	 */
 	private void setUpInitialData() {
 		addCustmor(
 				new JsonObject().put("id", "01").put("name", "Evan").put("contacts", new JsonArray().add(2672364531l))
