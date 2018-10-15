@@ -62,9 +62,9 @@ public class CustomerVerticle extends AbstractVerticle {
 		customers.forEach((v) -> {
 			arr.addAll(v.getJsonArray("contacts"));
 			if (v.getJsonArray("diactivated").size() > 0)
-				arr.add(v.getJsonArray("diactivated"));
+				arr.addAll(v.getJsonArray("diactivated"));
 		});
-		routingContext.response().putHeader("content-type", "application/json").end(arr.encodePrettily());
+		routingContext.response().putHeader("content-type", "application/json").end((arr.encodePrettily()));
 	}
 
 	private void handleActivateMobile(RoutingContext routingContext) {
